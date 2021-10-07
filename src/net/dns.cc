@@ -329,10 +329,10 @@ public:
         auto p = std::make_unique<promise<srv_records>>();
         auto f = p->get_future();
 
-        const auto query = format("_{}._{}.{}",
+        const auto query = format("_{}._{}{}",
                                   service,
                                   proto == srv_proto::tcp ? "tcp" : "udp",
-                                  domain);
+                                  domain.empty() ? "" : ("." + domain));
 
         dns_log.debug("Query srv {}", query);
 
