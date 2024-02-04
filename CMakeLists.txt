@@ -799,8 +799,8 @@ set (Seastar_PRIVATE_CXX_FLAGS
   -Wno-error=deprecated)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  include (CheckGcc107852)
-  if (NOT Cxx_Compiler_BZ107852_Free)
+  if (NOT Cxx_Compiler_BZ107852_Free AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 13)
+    include (CheckGcc107852)
     list (APPEND Seastar_PRIVATE_CXX_FLAGS
       -Wno-error=stringop-overflow
       -Wno-error=array-bounds)
