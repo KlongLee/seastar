@@ -798,13 +798,13 @@ set (Seastar_PRIVATE_CXX_FLAGS
   -Wdeprecated
   -Wno-error=deprecated)
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  include (CheckGcc107852)
-  if (NOT Cxx_Compiler_BZ107852_Free)
-    list (APPEND Seastar_PRIVATE_CXX_FLAGS
-      -Wno-error=stringop-overflow
-      -Wno-error=array-bounds)
-  endif()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND
+    FMT_VERSION VERSION_LESS 10.1.1 AND
+    CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 13.0.0)
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107852
+  list (APPEND Seastar_PRIVATE_CXX_FLAGS
+    -Wno-error=stringop-overflow
+    -Wno-error=array-bounds)
 endif ()
 
 if (NOT BUILD_SHARED_LIBS)
