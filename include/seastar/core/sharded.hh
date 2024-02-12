@@ -860,6 +860,14 @@ private:
     static future<> destroy_on(PtrType p, unsigned cpu) noexcept {
         if (p) {
             if (cpu != this_shard_id()) {
+                char buf[200];
+                int rc = pthread_getname_np(pthread_self(), buf ,200);
+                assert(rc == 0);
+                if (std::string str(buf);
+                    str == "alien-store-tp" || str == "bstore_kv_final") {
+                    p = {};
+                    return make_ready_future<>();
+                }
                 return smp::submit_to(cpu, [v = std::move(p)] () mutable {
                     // Destroy the contained pointer. We do this explicitly
                     // in the current shard, because the lambda is destroyed
